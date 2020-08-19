@@ -46,7 +46,7 @@ def expand_abbreviations(template, abbreviations):
     return template
 
 
-def repository_has_cookiecutter_json(repo_directory):
+def repository_has_rubric_json(repo_directory):
     """Determine if `repo_directory` contains a `cookiecutter.json` file.
 
     :param repo_directory: The candidate repository directory.
@@ -55,12 +55,12 @@ def repository_has_cookiecutter_json(repo_directory):
     repo_directory_exists = os.path.isdir(repo_directory)
 
     repo_config_exists = os.path.isfile(
-        os.path.join(repo_directory, 'cookiecutter.json')
+        os.path.join(repo_directory, 'rubric.json')
     )
     return repo_directory_exists and repo_config_exists
 
 
-def repository_has_cookiecutter_yaml(repo_directory):
+def repository_has_rubric_yaml(repo_directory):
     """Determine if `repo_directory` contains a `cookiecutter.yml` file.
     :param repo_directory: The candidate repository directory.
     :return: True if the `repo_directory` is valid, else False.
@@ -68,7 +68,7 @@ def repository_has_cookiecutter_yaml(repo_directory):
     repo_directory_exists = os.path.isdir(repo_directory)
 
     repo_config_exists = os.path.isfile(
-        os.path.join(repo_directory, 'cookiecutter.yml')
+        os.path.join(repo_directory, 'rubric.yml')
     )
     return repo_directory_exists and repo_config_exists
 
@@ -135,9 +135,9 @@ def determine_repo_dir(
 
     for repo_candidate in repository_candidates:
         # prefer yaml to json
-        if repository_has_cookiecutter_yaml(repo_candidate):
+        if repository_has_rubric_yaml(repo_candidate):
             return repo_candidate, cleanup
-        if repository_has_cookiecutter_json(repo_candidate):
+        if repository_has_rubric_json(repo_candidate):
             return repo_candidate, cleanup
 
     raise RepositoryNotFound(

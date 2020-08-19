@@ -85,7 +85,7 @@ def apply_overwrites_to_context(context, overwrite_context):
 
 
 def generate_context(
-    context_file='cookiecutter.json', default_context=None, extra_context=None
+    context_file='rubric.json', default_context=None, extra_context=None
 ):
     """Generate the context for a Cookiecutter project template.
 
