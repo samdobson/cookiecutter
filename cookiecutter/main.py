@@ -95,13 +95,13 @@ def cookiecutter(
 
         # prompt the user to manually configure at the command line.
         # except when 'no-input' flag is set
-        context['cookiecutter'] = prompt_for_config(context, no_input)
+        context = prompt_for_config(context, no_input)
 
         # include template dir or url in the context dict
-        context['cookiecutter']['_template'] = template
+        context['_template'] = template
 
         # include output+dir in the context dict
-        context['cookiecutter']['_output_dir'] = os.path.abspath(output_dir)
+        context['_output_dir'] = os.path.abspath(output_dir)
 
         dump(config_dict['replay_dir'], template_name, context)
 

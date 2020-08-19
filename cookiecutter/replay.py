@@ -27,9 +27,6 @@ def dump(replay_dir, template_name, context):
     if not isinstance(context, dict):
         raise TypeError('Context is required to be of type dict')
 
-    if 'cookiecutter' not in context:
-        raise ValueError('Context is required to contain a cookiecutter key')
-
     replay_file = get_file_name(replay_dir, template_name)
 
     with open(replay_file, 'w') as outfile:

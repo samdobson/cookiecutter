@@ -152,7 +152,7 @@ def render_variable(env, raw, cookiecutter_dict):
 
     template = env.from_string(raw)
 
-    rendered_template = template.render(cookiecutter=cookiecutter_dict)
+    rendered_template = template.render(cookiecutter_dict)
     return rendered_template
 
 
@@ -180,7 +180,7 @@ def prompt_for_config(context, no_input=False):
     # First pass: Handle simple and raw variables, plus choices.
     # These must be done first because the dictionaries keys and
     # values might refer to them.
-    for key, raw in context['cookiecutter'].items():
+    for key, raw in context.items():
         if key.startswith('_') and not key.startswith('__'):
             cookiecutter_dict[key] = raw
             continue
@@ -208,7 +208,7 @@ def prompt_for_config(context, no_input=False):
             raise UndefinedVariableInTemplate(msg, err, context)
 
     # Second pass; handle the dictionaries.
-    for key, raw in context['cookiecutter'].items():
+    for key, raw in context.items():
         # Skip private type dicts
         if key.startswith('_') and not key.startswith('__'):
             continue

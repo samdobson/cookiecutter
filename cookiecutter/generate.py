@@ -53,7 +53,7 @@ def is_copy_only_path(path, context):
     :param context: cookiecutter context.
     """
     try:
-        for dont_render in context['cookiecutter']['_copy_without_render']:
+        for dont_render in context['_copy_without_render']:
             if fnmatch.fnmatch(path, dont_render):
                 return True
     except KeyError:
@@ -101,7 +101,7 @@ def generate_context(
     if context_file.endswith('.json'):
         try:
             with open(context_file) as file_handle:
-                obj = json.load(file_handle, object_pairs_hook=OrderedDict)
+                context = json.load(file_handle, object_pairs_hook=OrderedDict)
         except ValueError as e:
             # JSON decoding error.  Let's throw a new exception that is more
             # friendly for the developer or user.
@@ -114,19 +114,14 @@ def generate_context(
     else:
         # FIXME handle potential errors
         with open(context_file, encoding='utf-8') as file_handle:
-            obj = ordered_load(file_handle, yaml.SafeLoader)
-
-    # Add the Python object to the context dictionary
-    file_name = os.path.split(context_file)[1]
-    file_stem = file_name.split('.')[0]
-    context[file_stem] = obj
+            context = ordered_load(file_handle, yaml.SafeLoader)
 
     # Overwrite context variable defaults with the default context from the
     # user's global config, if available
     if default_context:
-        apply_overwrites_to_context(obj, default_context)
+        apply_overwrites_to_context(context, default_context)
     if extra_context:
-        apply_overwrites_to_context(obj, extra_context)
+        apply_overwrites_to_context(context, extra_context)
 
     logger.debug('Context generated is %s', context)
     return context
@@ -197,8 +192,8 @@ def generate_file(project_dir, infile, context, env, skip_if_file_exists=False):
 
             # Use `_new_lines` overwrite from context, if configured.
             newline = rd.newlines
-            if context['cookiecutter'].get('_new_lines', False):
-                newline = context['cookiecutter']['_new_lines']
+            if context.get('_new_lines', False):
+                newline = context['_new_lines']
                 logger.debug('Overwriting end line character with %s', newline)
 
         logger.debug('Writing contents to file %s', outfile)
@@ -294,7 +289,7 @@ def generate_files(
     logger.debug('Generating project from %s...', template_dir)
     context = context or OrderedDict([])
 
-    envvars = context.get('cookiecutter', {}).get('_jinja2_env_vars', {})
+    envvars = context.get('_jinja2_env_vars', {})
 
     unrendered_dir = os.path.split(template_dir)[1]
     ensure_dir_is_templated(unrendered_dir)
