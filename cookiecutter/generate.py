@@ -293,6 +293,8 @@ def generate_files(
 
     unrendered_dir = os.path.split(template_dir)[1]
     ensure_dir_is_templated(unrendered_dir)
+    if 'cookiecutter' not in context:
+        context['cookiecutter'] = context
     env = StrictEnvironment(context=context, keep_trailing_newline=True, **envvars)
     try:
         project_dir, output_directory_created = render_and_create_dir(
